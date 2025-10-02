@@ -15,12 +15,16 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { Auth } from 'src/user/users/decorators/auth.decorator';
+import { ValidRoles } from 'src/user/users/interface/valid-roles';
 
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post()
+  @Auth( ValidRoles.USER )
+  
   create(@Body() createProjectDto: CreateProjectDto) {
     return this.projectsService.create(createProjectDto);
   }
@@ -36,11 +40,15 @@ export class ProjectsController {
   }
 
   @Patch(':id')
+  @Auth( ValidRoles.USER )
+
   update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
     return this.projectsService.update(id, updateProjectDto);
   }
 
   @Delete(':id')
+  @Auth( ValidRoles.USER )
+
   remove(@Param('id') id: string) {
     return this.projectsService.remove(id);
   }

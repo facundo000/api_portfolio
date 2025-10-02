@@ -2,12 +2,15 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { ProjectsLinksService } from './projects_links.service';
 import { CreateProjectsLinkDto } from './dto/create-projects_link.dto';
 import { UpdateProjectsLinkDto } from './dto/update-projects_link.dto';
+import { Auth } from 'src/user/users/decorators/auth.decorator';
+import { ValidRoles } from 'src/user/users/interface/valid-roles';
 
 @Controller('projects-links')
 export class ProjectsLinksController {
   constructor(private readonly projectsLinksService: ProjectsLinksService) {}
 
   @Post()
+  @Auth( ValidRoles.USER )
   create(@Body() createProjectsLinkDto: CreateProjectsLinkDto) {
     return this.projectsLinksService.create(createProjectsLinkDto);
   }
@@ -23,11 +26,15 @@ export class ProjectsLinksController {
   }
 
   @Patch(':id')
+  @Auth( ValidRoles.USER )
+  
   update(@Param('id') id: string, @Body() updateProjectsLinkDto: UpdateProjectsLinkDto) {
     return this.projectsLinksService.update(id, updateProjectsLinkDto);
   }
 
   @Delete(':id')
+  @Auth( ValidRoles.USER )
+
   remove(@Param('id') id: string) {
     return this.projectsLinksService.remove(id);
   }
@@ -52,13 +59,13 @@ export class ProjectsLinksController {
     return this.projectsLinksService.findByProjectAndLink(projectId, linkId);
   }
 
-  @Delete('remove/:projectId/:linkId')
-  removeByProjectAndLink(
-    @Param('projectId') projectId: string,
-    @Param('linkId') linkId: string
-  ) {
-    return this.projectsLinksService.removeByProjectAndLink(projectId, linkId);
-  }
+  // @Delete('remove/:projectId/:linkId')
+  // removeByProjectAndLink(
+  //   @Param('projectId') projectId: string,
+  //   @Param('linkId') linkId: string
+  // ) {
+  //   return this.projectsLinksService.removeByProjectAndLink(projectId, linkId);
+  // }
 
   @Get('stats/project-link-stats')
   getProjectLinkStats() {

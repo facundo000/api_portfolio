@@ -14,37 +14,6 @@ export class ProjectsService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  // async create(createProjectDto: CreateProjectDto): Promise<Project> {
-  //   try {
-  //     // Verificar si ya existe un proyecto con el mismo título en inglés
-  //     const existingProject = await this.projectRepository.findOne({
-  //       where: { title_en: createProjectDto.title_en }
-  //     });
-
-  //     if (existingProject) {
-  //       throw new BadRequestException(`Project with title '${createProjectDto.title_en}' already exists`);
-  //     }
-
-  //     // Crear nueva instancia del proyecto
-  //     const { user_id, ...projectData } = createProjectDto;
-  //     const newProject = this.projectRepository.create({
-  //       ...projectData,
-  //       user: { id_user: user_id }
-  //     });
-      
-  //     // Guardar en la base de datos
-  //     const savedProject = await this.projectRepository.save(newProject);
-      
-  //     // Retornar con relaciones
-  //     return await this.findOne(savedProject.id_project);
-  //   } catch (error) {
-  //     if (error instanceof BadRequestException) {
-  //       throw error;
-  //     }
-  //     throw new BadRequestException('Error creating project: ' + error.message);
-  //   }
-  // }
-
   async create(
     createProjectDto: CreateProjectDto, 
     files?: { img?: Express.Multer.File[], gif?: Express.Multer.File[] }
@@ -122,7 +91,7 @@ export class ProjectsService {
   async findAll(): Promise<Project[]> {
     try {
       return await this.projectRepository.find({
-        relations: ['user', 'projects_icons', 'projects_links'],
+        relations: [ 'projects_icons', 'projects_links'],
         order: {
           title_en: 'ASC'
         }

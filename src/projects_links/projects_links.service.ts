@@ -51,13 +51,18 @@ export class ProjectsLinksService {
       }
 
       // Crear nueva instancia de la relación
-      const newProjectsLink = this.projectsLinkRepository.create(createProjectsLinkDto);
+      const newProjectsLink = this.projectsLinkRepository.create({
+      project_id: createProjectsLinkDto.project_id,
+      link_id: createProjectsLinkDto.link_id,
+    });
+    // const newProjectsLink = this.projectsLinkRepository.create(createProjectsLinkDto)
       
       // Guardar en la base de datos
-      const savedProjectsLink = await this.projectsLinkRepository.save(newProjectsLink);
+      // const savedProjectsLink = await this.projectsLinkRepository.save(newProjectsLink);
       
       // Retornar con relaciones
-      return await this.findOne(savedProjectsLink.id_project_link);
+      // return await this.findOne(savedProjectsLink.id_project_link);
+      return await this.projectsLinkRepository.save(newProjectsLink);
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
@@ -69,7 +74,7 @@ export class ProjectsLinksService {
   async findAll(): Promise<ProjectsLink[]> {
     try {
       return await this.projectsLinkRepository.find({
-        relations: ['project_id', 'link_id'],
+        relations: ['project', 'link'],
         order: {
           id_project_link: 'ASC'
         }
@@ -83,7 +88,7 @@ export class ProjectsLinksService {
     try {
       const projectsLink = await this.projectsLinkRepository.findOne({
         where: { id_project_link: id },
-        relations: ['project_id', 'link_id']
+        relations: ['project', 'link']
       });
 
       if (!projectsLink) {

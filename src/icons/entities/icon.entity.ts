@@ -7,20 +7,26 @@ export class Icon {
     @PrimaryGeneratedColumn('uuid')
     id_icon: string
 
+    @Column()
+    type_icon_id: string;
+
     @ManyToOne(
         (type) => TypesIcon,
-        (TypesIcon) => TypesIcon.id_type_icon
+        (TypesIcon) => TypesIcon.id_type_icon,
+         { 
+            nullable: false,
+            onDelete: 'CASCADE' 
+        }
     )
     @JoinColumn({ name: 'type_icon_id' })
-    type_icon_id: string
+    type_icon: TypesIcon
 
     @Column()
     icon: string
 
      @OneToMany(
         (type) => ProjectsIcon,
-        (ProjectsIcon) => ProjectsIcon.icon_id
+        (ProjectsIcon) => ProjectsIcon.icon
     )
-    projectsIcons: ProjectsIcon[]
-    
+    projectsIcons: ProjectsIcon[]    
 }

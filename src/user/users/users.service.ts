@@ -23,12 +23,13 @@ export class UsersService {
         const user = this.UserRepository.create(
           {
             ...userData,
+            role: 'user',
             password: bcrypt.hashSync(password, 10)
           }
         );
         await this.UserRepository.save(user);
          
-        const { password: _, ...userWithoutPassword } = user;
+        const { password: _,...userWithoutPassword } = user;
   
         return {
           ...userWithoutPassword,

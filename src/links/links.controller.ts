@@ -2,12 +2,16 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { LinksService } from './links.service';
 import { CreateLinkDto } from './dto/create-link.dto';
 import { UpdateLinkDto } from './dto/update-link.dto';
+import { Auth } from 'src/user/users/decorators/auth.decorator';
+import { ValidRoles } from 'src/user/users/interface/valid-roles';
 
 @Controller('links')
 export class LinksController {
   constructor(private readonly linksService: LinksService) {}
 
   @Post()
+  @Auth( ValidRoles.USER )
+  
   create(@Body() createLinkDto: CreateLinkDto) {
     return this.linksService.create(createLinkDto);
   }
@@ -23,11 +27,15 @@ export class LinksController {
   }
 
   @Patch(':id')
+    @Auth( ValidRoles.USER )
+
   update(@Param('id') id: string, @Body() updateLinkDto: UpdateLinkDto) {
     return this.linksService.update(id, updateLinkDto);
   }
 
   @Delete(':id')
+    @Auth( ValidRoles.USER )
+
   remove(@Param('id') id: string) {
     return this.linksService.remove(id);
   }

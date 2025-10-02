@@ -33,14 +33,14 @@ export class ProjectsIconsService {
 
   async findAll(): Promise<ProjectsIcon[]> {
     return await this.projectsIconRepository.find({
-      relations: ['project_id', 'icon_id'],
+      relations: ['project', 'icon'],
     });
   }
 
   async findOne(id: string): Promise<ProjectsIcon> {
     const projectsIcon = await this.projectsIconRepository.findOne({
       where: { id_project_icon: id },
-      relations: ['project_id', 'icon_id'],
+      relations: ['project', 'icon'],
     });
 
     if (!projectsIcon) {

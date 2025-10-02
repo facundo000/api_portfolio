@@ -9,33 +9,47 @@ import { JwtPayload } from "../interface/jwt-payload.interface";
 
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     constructor(
         @InjectRepository( User )
         private readonly userRepository: Repository<User>,
 
-        confService: ConfigService
+        private readonly confService: ConfigService
     ){
         super({
-            secretOrKey: confService.get<string>('JWT_SECRET'),
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+            secretOrKey: confService.get('JWT_SECRET'),
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: false
         });
+        console.log('JWT Strategy initialized with secret:', !!confService.get('JWT_SECRET')); // Log para verificar la inicialización
     }
 
     async validate( payload: JwtPayload ): Promise<User> {
-        
-        const { id } = payload;
-
-        const user = await this.userRepository.findOneBy({ id_user: id });
-
-        if ( !user ) 
-            throw new UnauthorizedException('Token not valid')
+        try {
+            console.log('Attempting to validate token with payload:', payload);
             
-        // if ( !user.esActivo ) 
-        //     throw new UnauthorizedException('User is inactive, talk with an admin');
-        
+            if (!payload || !payload.id) {
+                console.log('Invalid payload structure:', payload);
+                throw new UnauthorizedException('Invalid token structure');
+            }
 
-        return user;
+            const { id } = payload;
+            console.log('Looking for user with id:', id);
+
+            const user = await this.userRepository.findOneBy({ id_user: id });
+
+            if (!user) {
+                console.log('User not found for id:', id);
+                throw new UnauthorizedException('Token not valid');
+            }
+
+            console.log('User found:', user);
+            return user;
+
+        } catch (error) {
+            console.error('Error in validate method:', error);
+            throw error;
+        }
     }
 }

@@ -7,11 +7,9 @@ export class Link {
     @PrimaryGeneratedColumn('uuid')
     id_link: string;
 
-    // Agregar el campo 'link' que falta según el diagrama
     @Column({ type: 'varchar', length: 500 })
     link: string;
 
-    // Relación con TypesLink (ManyToOne)
     @ManyToOne(
         () => TypesLink,
         (typesLink) => typesLink.links,
@@ -29,7 +27,7 @@ export class Link {
     // Relación con ProjectsLinks (OneToMany)
     @OneToMany(
         () => ProjectsLink,
-        (projectLink) => projectLink.link_id,
+        (projectLink) => projectLink.link,
         { 
             cascade: true,
             lazy: false 

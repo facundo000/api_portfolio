@@ -3,9 +3,9 @@ import { IsNotEmpty, IsUUID } from 'class-validator';
 export class CreateProjectsIconDto {
   @IsNotEmpty()
   @IsUUID()
-  project_id: string;
+  project_id?: string;
 
   @IsNotEmpty()
   @IsUUID()
-  icon_id: string;
+  icon_id?: string;
 }

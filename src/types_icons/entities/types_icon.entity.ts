@@ -12,7 +12,7 @@ export class TypesIcon {
 
     @OneToMany(
         (type) => Icon,
-        (Icon) => Icon.type_icon_id
+        (Icon) => Icon.type_icon
     )
     icons: Icon[]
     

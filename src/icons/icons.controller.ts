@@ -14,12 +14,16 @@ import {
 import { IconsService } from './icons.service';
 import { CreateIconDto } from './dto/create-icon.dto';
 import { UpdateIconDto } from './dto/update-icon.dto';
+import { ValidRoles } from 'src/user/users/interface/valid-roles';
+import { Auth } from 'src/user/users/decorators/auth.decorator';
 
 @Controller('icons')
 export class IconsController {
   constructor(private readonly iconsService: IconsService) {}
 
   @Post()
+    @Auth( ValidRoles.USER )
+  
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createIconDto: CreateIconDto) {
     return this.iconsService.create(createIconDto);
@@ -49,6 +53,7 @@ export class IconsController {
   }
 
   @Patch(':id')
+    @Auth( ValidRoles.USER )
   update(
     @Param('id', ParseUUIDPipe) id: string, 
     @Body() updateIconDto: UpdateIconDto
@@ -57,14 +62,15 @@ export class IconsController {
   }
 
   @Delete(':id')
+    @Auth( ValidRoles.USER )
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.iconsService.remove(id);
   }
 
-  @Delete('type/:typeId')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  removeByType(@Param('typeId', ParseUUIDPipe) typeId: string) {
-    return this.iconsService.removeByType(typeId);
-  }
+  // @Delete('type/:typeId')
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // removeByType(@Param('typeId', ParseUUIDPipe) typeId: string) {
+  //   return this.iconsService.removeByType(typeId);
+  // }
 }

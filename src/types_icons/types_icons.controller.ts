@@ -14,12 +14,15 @@ import {
 import { TypesIconsService } from './types_icons.service';
 import { CreateTypesIconDto } from './dto/create-types_icon.dto';
 import { UpdateTypesIconDto } from './dto/update-types_icon.dto';
+import { Auth } from 'src/user/users/decorators/auth.decorator';
+import { ValidRoles } from 'src/user/users/interface/valid-roles';
 
 @Controller('types-icons')
 export class TypesIconsController {
   constructor(private readonly typesIconsService: TypesIconsService) {}
 
   @Post()
+  @Auth( ValidRoles.USER )
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createTypesIconDto: CreateTypesIconDto) {
     return this.typesIconsService.create(createTypesIconDto);
@@ -46,6 +49,8 @@ export class TypesIconsController {
   }
 
   @Patch(':id')
+  @Auth( ValidRoles.USER )
+
   update(
     @Param('id', ParseUUIDPipe) id: string, 
     @Body() updateTypesIconDto: UpdateTypesIconDto
@@ -54,6 +59,8 @@ export class TypesIconsController {
   }
 
   @Delete(':id')
+  @Auth( ValidRoles.USER )
+
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.typesIconsService.remove(id);

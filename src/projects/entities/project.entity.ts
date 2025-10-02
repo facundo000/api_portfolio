@@ -26,9 +26,12 @@ export class Project {
     @Column({ nullable: true })
     img?: string
 
+    @Column()
+    user_id: string;
+
     @ManyToOne(
         () => User,
-        (user) => user.id_user,
+        (user) => user.projects,
         { 
             nullable: false,
             onDelete: 'CASCADE' 
@@ -39,13 +42,13 @@ export class Project {
 
     @OneToMany(
         (type) => ProjectsLink,
-        (ProjectsLink) => ProjectsLink.project_id
+        (ProjectsLink) => ProjectsLink.project
     )
     projects_links: ProjectsLink[]
 
     @OneToMany(
         (type) => ProjectsIcon,
-        (ProjectsIcon) => ProjectsIcon.project_id
+        (ProjectsIcon) => ProjectsIcon.project
     )
     projects_icons: ProjectsIcon[]
 }
